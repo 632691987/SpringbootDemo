@@ -1,0 +1,21 @@
+这里说明什么是一个starter, 例如：
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
+
+知识点1：
+这些都是 starter, 在命名方面， starter 的命名逻辑是 spring-boot-starter-<model name>
+而我们应该写得是例如 mybatis-spring-boot-starter
+
+知识点2：
+在现实中至少要有2个模块，一个是 starter 本身，一个是 configurater, 例如，

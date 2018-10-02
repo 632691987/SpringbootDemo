@@ -1,0 +1,11 @@
+Docker 主机：安装 Docker程序得机器
+Docker 客户端: 连接 Docker
+Docker 仓库：用于保存打包好得软件镜像
+
+
+MySQL 镜像启动后创建 MySQL 容器 (images create container)
+使用 Docker 步骤：
+1,安装 Docker
+2,去 Docker 仓库找到对应得镜像
+3,使用Docker 运行镜像，生成 Docker 容器
+4,停止container 运行

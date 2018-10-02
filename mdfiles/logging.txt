@@ -1,0 +1,29 @@
+* JUL ------------> 只不过是跟log4j 竞争
+* JCL ------------> 上次更新是 2014 年
+* Jboss-logging --> 使用场景比较少
+* logback---------> log4j 重构 --> 最后使用
+* log4j ----------> 有性能问题
+* log4j2----------> 只是借 log4j 名义写得
+* slf4j ----------> 
+
+SpringBoot 是用 SLF4j 和 logback, 也是最终选择
+不应该直接调用日志得实现类，而应该调用日志抽象层里面的方法
+
+由于不同得框架使用不同得日志框架
+Spring -> common-logging
+Hibernate -> jboss-logging
+
+因此 SLF4J 统一所有的日志
+1，自己写的程序应该面对 SLF4J-API 去编程, 然后 SLF4J-API 去调用 LOGBACK 去编程
+2, 如果我们是用别的框架，
+
+有的框架是用 Commons Logging API, 那么它就会用 JCL-OVER-SLF4J.jar   去代替
+有的框架是用 Log4J API          , 那么它就会用 LOG4J-OVER-SLF4J.jar 去代替
+有的框架是用 JUL API            , 那么它就会用 JUL-TO-SLF4J.jar     去代替
+
+1, 将系统中其他日志框架先排除, 例如导入 Spring 得时候排除 Common-logging
+2, 用中间包来替换原有的日志框架
+3, 最终是用 slf4j 的其他实现
+
+用 logback.xml 可以由 logback 识别
+用 logback-spring.xml 可以由 springboot 识别，然后就可以有更加多的特性

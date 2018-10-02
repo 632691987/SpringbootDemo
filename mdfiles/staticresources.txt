@@ -1,0 +1,11 @@
+1, 所有webjars 所有路径都去 classpath:/META-INF/resources/webjars，这是根据jar包里面得目录路径出发去看得
+1.1 webjars 简单来说就是已jar 包得方式因引入静态资源, https://www.webjars.org/
+1.2 http://localhost:28081/webjars/jquery/3.3.1/jquery.js 其实在纯 WebMVC 里面是要去配置 static resources, 但是WebMvcAutoConfiguration.addResourceHandlers 已经做好了
+1.3 默认帮我们配置好得还有, 他们的实际路径都在 resources 文件夹里面，如果文件同名，就按照下面得次序，从高到低.这几个文件夹也叫做静态资源文件夹
+- /META-INF/resources/
+- /resources/
+- /static/
+- /public/
+1.4 上面几个文件是由 org.springframework.boot.autoconfigure.web.ResourceProperties 决定的
+1.5 当然也可以自己自定义静态资源文件夹了，例如： [spring.resources.static-locations=classpath:/thymeleaf/, classpath:/freemarker/]
+1.6 一旦设置了静态资源，上面得预设得资源就会无效

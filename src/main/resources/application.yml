@@ -1,0 +1,81 @@
+server:
+  port: 28080
+
+spring.resources.static-locations:
+  - classpath:/thymeleaf/
+  - classpath:/bootstrap/
+  - classpath:/customjs/
+  - classpath:/customcss/
+  - classpath:/static/
+
+# 注意我是用的是 MySQL 8, 是 docker 来得
+spring:
+  messages:
+    basename: i18n/application, i18n/exception
+  thymeleaf:
+    cache: false
+    servlet:
+      content-type: text/html
+    encoding: UTF-8
+  datasource:
+    username: root
+    password: 1q2w3e4R
+    url: jdbc:mysql://localhost:3360/atguigu_jdbc?useSSL=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+
+
+# 由于默认是 classpath:/templates/, 而我上面已经覆盖了默认得 static-locations, 所以这里也必须要一起改过来
+# 除非我添加一个 classpath:/templates/ 到 spring.resources.static-locations
+spring.thymeleaf:
+  prefix: classpath:/thymeleaf/
+
+#下面是标准得对象写法
+friend:
+  lastName: zhangsan
+  age: 20
+
+#下面叫行内写发，同样表示对象
+friend2: {firstName=lisi, age=26}
+
+name: vincent
+
+#下面表示数组
+pets:
+  - cat
+  - dog
+  - pig
+
+pets2: [cat, duck, goose]
+
+#下面是实际例子, 记住： 第一个字母不能是大写
+#下面得 ${} 是支持的
+person2333:
+  lastName: zhangsan
+  age: 36
+  boss: false
+  birth: 2017/12/12
+  maps: {k1: v1, k2: v2}
+  lists:
+    - lisi${person2333.lastName:default_name}
+    - zhaoliu
+    - vincent
+  dog:
+    name: xiaogou
+    age: 63
+
+#下面这些叫文档块
+---
+server:
+  port: 28081
+spring:
+  profiles: dev
+---
+server:
+  port: 28082
+spring:
+  profiles: prod

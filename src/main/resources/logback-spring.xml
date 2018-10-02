@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!--
+        1, 这是屏蔽Logback自己本身的log
+
+        2. 注意下面，变量可以直接取 System.env() 的 key, 例如 ${JAVA_HOME}, ${PWD}
+        <Pattern>%d{yyyy-MM-dd HH:mm:ss} ${JAVA_HOME} %-5level %-63logger - %msg%n</Pattern>
+        ${LOG_FILE}和${FILE_LOG_PATTERN}: 这个是来自 logback 本身得内置变量
+
+        3, 用 logback-spring.xml 可以由 springboot 识别，然后就可以有更加多的特性
+    -->
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
+    <property name="LOG_FOLDER" value="." />
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %-63logger - %msg%n</Pattern>
+        </layout>
+    </appender>
+
+    <springProfile name="prod">
+        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_FOLDER}/spring.log</file>
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %-63logger - %msg%n</Pattern>
+            </encoder>
+
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${LOG_FOLDER}/archived/debug.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>10MB</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+            </rollingPolicy>
+        </appender>
+    </springProfile>
+
+    <logger name="org.springframework" level="info" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <!--Tomcat logging-->
+    <logger name="org.apache.catalina" level="error" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <logger name="org.apache.catalina" level="error" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <logger name="com.zaxxer.hikari" level="error" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <logger name="com.springboot" level="debug" additivity="false">
+        <springProfile name="!prod">
+            <appender-ref ref="STDOUT"/>
+        </springProfile>
+        <springProfile name="prod">
+            <appender-ref ref="STDOUT"/>
+            <appender-ref ref="FILE"/>
+        </springProfile>
+    </logger>
+
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+</configuration>

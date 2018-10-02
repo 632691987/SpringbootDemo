@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration
+
+1, 自动整合了 view resolver
+2, 自动添加了 convertor, formatter
+3, 自动添加了 HttpMessageConvertor, 这里是SpringMVC 用来转换 USER -> JSON 这些

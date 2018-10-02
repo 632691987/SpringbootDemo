@@ -1,0 +1,63 @@
+1，现象：
+
+如果是browser, 就会出现
+=============================================================================================
+Whitelabel Error Page
+This application has no explicit mapping for /error, so you are seeing this as a fallback.
+
+Sat Sep 22 15:26:41 CEST 2018
+There was an unexpected error (type=Not Found, status=404).
+No message available
+=============================================================================================
+如果是 postman, 就会出现 Json 数据
+{
+    "timestamp": "2018-09-22T13:25:53.857+0000",
+    "status": 404,
+    "error": "Not Found",
+    "message": "No message available",
+    "path": "/hello11"
+}
+=============================================================================================
+
+
+
+
+2，原因：
+
+参照：org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration
+
+这是 org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController 决定的，核心代码是：
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	@RequestMapping(produces = "text/html")
+	public ModelAndView errorHtml(HttpServletRequest request,
+			HttpServletResponse response) {
+		HttpStatus status = getStatus(request);
+		Map<String, Object> model = Collections.unmodifiableMap(getErrorAttributes(
+				request, isIncludeStackTrace(request, MediaType.TEXT_HTML)));
+		response.setStatus(status.value());
+		ModelAndView modelAndView = resolveErrorView(request, response, status, model);
+		return (modelAndView != null) ? modelAndView : new ModelAndView("error", model);
+	}
+
+	@RequestMapping --> 这是判断出其他 client 端的原因，打开 POSTMAN 控制台，看出 accept:"*/*"，所以来到这里
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> error(HttpServletRequest request) {
+		Map<String, Object> body = getErrorAttributes(request,
+				isIncludeStackTrace(request, MediaType.ALL));
+		HttpStatus status = getStatus(request);
+		return new ResponseEntity<>(body, status);
+	}
+	而JSON 格式正正就是 org.springframework.boot.web.servlet.error.DefaultErrorAttributes.getErrorAttributes 来的
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+结论： 注意，下面的规则是不可以修改得，因为至少到 SpringBoot 2.0.4, 都是 hardcode 的，
+除非自己增加并且 implment 一个 ErrorViewResolver
+或者更近一步， @Controller @RequestMapping("${server.error.path:${error.path:/error}}") public class BasicErrorController extends AbstractErrorController {
+去加一个 BasicErrorController 再 extends
+
+
+
+结论啊！！！！！
+=========================================
+对于浏览器， --> 先找到 error/404.html 否则去 error/4xx.hml，否则去 error.html
+对于其他  ， -->

@@ -1,0 +1,33 @@
+docker search mysql
+
+docker pull mysql:5.5 下载MYSQL 5.5 tag 的标签
+
+docker rmi <image-id>
+
+docker images 查看所有本地image
+
+根据镜像启动容器 docker run --name container-name -d image-name 例如：
+-d 代表后台运行
+docker run --name mytomcat -d tomcat:latest
+docker run -d -p 8888:8080 tomcat
+注意： 8888 是真机的端口，8080是容器内部的端口
+
+
+
+docker run -p 3306:3360 --name mysql -e MYSQL_ROOT_PASSWORD=1q2w3e4R -d mysql
+
+
+
+
+
+docker ps 查看正在运行的容器
+docker stop 停止运行中的容器
+docker start 启动刚刚被停止的容器
+docker rm <container id>删除停止的容器（容器一定要是停止状态）
+docker logs <container id> 查看容器日志
+
+
+
+
+理论：
+一个 image 可以有多个容器，并且是互相独立的

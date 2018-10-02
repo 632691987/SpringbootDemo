@@ -1,0 +1,19 @@
+语法规则：
+1, th:text 改变组件里面的文本属性
+2, th:<html属性>, 例如 th:id, th:class, 来替换原生属性得值
+
+特殊符号：
+$ 是或去 model 参数得
+# 是或去国际化参数得
+* 是或去某一个对象得属性得
+@ 是超链接得
+~ 是片段表达式
+
+[[${user}]] 是获取 text
+[(${user})] 是获取 text. 但不转义特殊字符
+
+
+th:insert
+th:replace
+th:include
+三种形式得 fragment 有什么区别呢？
