@@ -34,20 +34,20 @@
         </appender>
     </springProfile>
 
-    <logger name="org.springframework" level="info" additivity="false">
+    <logger name="org.springframework" level="error" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
 
-    <!--Tomcat logging-->
-    <logger name="org.apache.catalina" level="error" additivity="false">
-        <appender-ref ref="STDOUT"/>
-    </logger>
-
-    <logger name="org.apache.catalina" level="error" additivity="false">
+    <!--apache component-->
+    <logger name="org.apache" level="error" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
 
     <logger name="com.zaxxer.hikari" level="error" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <logger name="org.hibernate" level="error" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
 
