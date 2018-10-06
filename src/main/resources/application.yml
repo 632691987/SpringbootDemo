@@ -20,7 +20,7 @@ spring:
   datasource:
     username: root
     password: 1q2w3e4R
-    url: jdbc:mysql://localhost:3360/atguigu_jdbc?useSSL=false
+    url: jdbc:mysql://localhost:3360/atguigu_jdbc?useSSL=false&allowPublicKeyRetrieval=true
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:

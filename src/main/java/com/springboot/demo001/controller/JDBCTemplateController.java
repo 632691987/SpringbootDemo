@@ -18,7 +18,7 @@ public class JDBCTemplateController {
     @ResponseBody
     @GetMapping("jdbcquery")
     public Map<String, Object> map() {
-        List<Map<String, Object>> list = jdbcTemplate.queryForList("select * from department");
+        List<Map<String, Object>> list = jdbcTemplate.queryForList("select * from Department");
         return list.get(0);
     }
 
