@@ -1,7 +1,7 @@
-package com.springboot.demo001.adviced.service;
+package com.springboot.demo001.adviced.cache.service;
 
-import com.springboot.demo001.adviced.bean.Employee;
-import com.springboot.demo001.adviced.repository.EmployeeRepository;
+import com.springboot.demo001.adviced.cache.bean.Employee;
+import com.springboot.demo001.adviced.cache.repository.EmployeeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

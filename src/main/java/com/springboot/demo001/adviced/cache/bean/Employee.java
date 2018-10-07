@@ -1,4 +1,4 @@
-package com.springboot.demo001.adviced.bean;
+package com.springboot.demo001.adviced.cache.bean;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;

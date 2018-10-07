@@ -1,9 +1,9 @@
 package com.springboot.demo001;
 
-import com.springboot.demo001.adviced.bean.Department;
-import com.springboot.demo001.adviced.bean.Employee;
-import com.springboot.demo001.adviced.repository.DepartmentRepository;
-import com.springboot.demo001.adviced.repository.EmployeeRepository;
+import com.springboot.demo001.adviced.cache.bean.Department;
+import com.springboot.demo001.adviced.cache.bean.Employee;
+import com.springboot.demo001.adviced.cache.repository.DepartmentRepository;
+import com.springboot.demo001.adviced.cache.repository.EmployeeRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

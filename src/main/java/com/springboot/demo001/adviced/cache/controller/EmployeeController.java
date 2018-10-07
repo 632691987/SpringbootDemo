@@ -1,7 +1,7 @@
-package com.springboot.demo001.adviced.controller;
+package com.springboot.demo001.adviced.cache.controller;
 
-import com.springboot.demo001.adviced.bean.Employee;
-import com.springboot.demo001.adviced.service.EmployeeService;
+import com.springboot.demo001.adviced.cache.bean.Employee;
+import com.springboot.demo001.adviced.cache.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
