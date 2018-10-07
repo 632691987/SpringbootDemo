@@ -5,12 +5,17 @@ import com.springboot.demo001.adviced.repository.EmployeeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@CacheConfig(cacheNames = {"emp"})/**CacheConfig 抽取缓存的公共配置**/
 public class EmployeeService {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -42,13 +47,13 @@ public class EmployeeService {
      */
     @Cacheable(cacheNames = {"emp"}, key = "#root.methodName+'['+#id+']'")
     public Optional<Employee> getEmp(Integer id) {
-        logger.info("Function {}, parameter is {} runned", "com.springboot.demo001.adviced.service.EmployeeService.getEmp", id);
+        logger.info("Function {}, parameter is {} runned", "getEmp", id);
         return employeeRepository.findById(id);
     }
 
-    @Cacheable(cacheNames = {"emp"}, keyGenerator = "SysKeyGenerator")
+    @Cacheable(keyGenerator = "SysKeyGenerator")
     public Optional<Employee> getEmp2(Integer id) {
-        logger.info("Function {}, parameter is {} runned", "com.springboot.demo001.adviced.service.EmployeeService.getEmp2", id);
+        logger.info("Function {}, parameter is {} runned", "getEmp2", id);
         return employeeRepository.findById(id);
     }
 
@@ -57,30 +62,82 @@ public class EmployeeService {
      * 只有 id > 1 才进行缓存
      *
      */
-    @Cacheable(cacheNames = {"emp"}, keyGenerator = "SysKeyGenerator", condition = "#id > 1")
+    @Cacheable(keyGenerator = "SysKeyGenerator", condition = "#id > 1")
     public Optional<Employee> getEmp3(Integer id) {
-        logger.info("Function {}, parameter is {} runned", "com.springboot.demo001.adviced.service.EmployeeService.getEmp3", id);
+        logger.info("Function {}, parameter is {} runned", "getEmp3", id);
         return employeeRepository.findById(id);
     }
 
     /**
      * 除非什么条件下就不缓存，例如下面就是不缓存 id =1
      */
-    @Cacheable(cacheNames = {"emp"}, keyGenerator = "SysKeyGenerator", unless = "#id == 1")
+    @Cacheable(keyGenerator = "SysKeyGenerator", unless = "#id == 1")
     public Optional<Employee> getEmp4(Integer id) {
-        logger.info("Function {}, parameter is {} runned", "com.springboot.demo001.adviced.service.EmployeeService.getEmp4", id);
+        logger.info("Function {}, parameter is {} runned", "getEmp4", id);
         return employeeRepository.findById(id);
     }
 
     /**
+     *
+     *
      * 异步模式下 unless 是不支持的
-     * @param id
-     * @return
+     *
+     *
      */
-    @Cacheable(cacheNames = {"emp"}, keyGenerator = "SysKeyGenerator", sync = true)
+    @Cacheable(keyGenerator = "SysKeyGenerator", sync = true)
     public Optional<Employee> getEmp5(Integer id) {
-        logger.info("Function {}, parameter is {} runned", "com.springboot.demo001.adviced.service.EmployeeService.getEmp5", id);
+        logger.info("Function {}, parameter is {} runned", "getEmp5", id);
         return employeeRepository.findById(id);
+    }
+
+    @Cacheable(key = "'employee'+#id")
+    public Optional<Employee> getEmp6(Integer id) {
+        logger.info("Function {}, parameter is {} runned", "getEmp6", id);
+        return employeeRepository.findById(id);
+    }
+
+
+    /**
+     *
+     *
+     * 注意一定要有返回值，这样cache 才能能够获取到
+     *
+     *
+     */
+    @CachePut(key = "'employee'+#employee.id")
+    public Employee updateEmployee(Employee employee) {
+        logger.info("Function {}, parameter is {} runned", "updateEmployee", employee);
+        this.employeeRepository.save(employee);
+        return employee;
+    }
+
+    /**
+     *
+     * CacheEvict 有个 option, 叫 beforeInvocation, 是说在方法执行之前执行的，那就避免了执行删除错误方法也能删除
+     */
+    @CacheEvict(key = "'employee'+#id")
+    public void deleteEmployee(Integer id) {
+        logger.info("Function {}, parameter is {} runned", "deleteEmployee", id);
+        //this.employeeRepository.deleteById(id);
+    }
+
+
+    /**
+     *
+     * 注意了，这个方法即使执行多少次都是会执行得，原因在于里面有个 CachePut
+     *
+     */
+    @Caching(
+            cacheable = {
+                    @Cacheable(key="'employee'+#lastName")
+            },
+            put = {
+                    @CachePut(key = "'employee'+#result.id")
+            }
+    )
+    public Employee getEmployeeByName(String lastName) {
+        logger.info("Function {}, parameter is {} runned", "getEmployeeByName", lastName);
+        return this.employeeRepository.findByLastName(lastName).get();
     }
 
 }
